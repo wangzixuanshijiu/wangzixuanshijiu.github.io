@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>三件作品 · 互动编程课程介绍</title>
+<meta name="description" content="王子轩《互动编程》课程三件作品详细介绍：几何构成、粒子运动、像素冒险 3D">
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+        --bg: #0B1120;
+        --panel: #111A2E;
+        --panel2: #0E1628;
+        --line: #22304F;
+        --text: #E2E8F0;
+        --muted: #94A3B8;
+        --dim: #64748B;
+        --accent: #22D3EE;
+        --gold: #FBBF24;
+        --violet: #A78BFA;
+        --pink: #F0ABFC;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", system-ui, sans-serif;
+        line-height: 1.7;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ---------- 头部 ---------- */
+    header {
+        position: relative;
+        padding: 110px 24px 90px;
+        text-align: center;
+        overflow: hidden;
+        background:
+            radial-gradient(ellipse 60% 50% at 50% -10%, rgba(34,211,238,.13), transparent),
+            radial-gradient(ellipse 40% 40% at 85% 110%, rgba(167,139,250,.10), transparent),
+            var(--bg);
+        border-bottom: 1px solid var(--line);
+    }
+    header::before {
+        content: "";
+        position: absolute; inset: 0;
+        background-image:
+            linear-gradient(rgba(148,163,184,.045) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(148,163,184,.045) 1px, transparent 1px);
+        background-size: 44px 44px;
+        pointer-events: none;
+    }
+    .kicker {
+        display: inline-block;
+        font-size: 13px; letter-spacing: .35em;
+        color: var(--accent);
+        border: 1px solid rgba(34,211,238,.35);
+        border-radius: 999px;
+        padding: 6px 18px;
+        margin-bottom: 26px;
+    }
+    header h1 { font-size: 46px; font-weight: 800; letter-spacing: .06em; }
+    header h1 span { color: var(--accent); }
+    header .sub {
+        max-width: 640px; margin: 18px auto 0;
+        color: var(--muted); font-size: 17px;
+    }
+    .nav {
+        margin-top: 36px;
+        display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+    }
+    .nav a {
+        font-size: 14px; color: var(--text);
+        border: 1px solid var(--line);
+        background: var(--panel);
+        padding: 9px 20px; border-radius: 999px;
+        transition: all .2s;
+    }
+    .nav a:hover { border-color: var(--accent); text-decoration: none; transform: translateY(-2px); }
+
+    /* ---------- 作品区块 ---------- */
+    section.work {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 80px 24px 30px;
+    }
+    .work-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 30px; }
+    .work-num {
+        font-size: 52px; font-weight: 800; line-height: 1;
+        color: transparent;
+        -webkit-text-stroke: 1.5px var(--accent);
+        opacity: .8;
+    }
+    .work:nth-of-type(2) .work-num { -webkit-text-stroke-color: var(--pink); }
+    .work:nth-of-type(3) .work-num { -webkit-text-stroke-color: var(--violet); }
+    .work-head h2 { font-size: 32px; font-weight: 700; }
+    .work-head .en { font-size: 14px; color: var(--dim); letter-spacing: .2em; }
+
+    .work-body {
+        display: grid;
+        grid-template-columns: 380px 1fr;
+        gap: 36px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 28px;
+    }
+    .figure { display: flex; flex-direction: column; gap: 12px; }
+    .figure img {
+        width: 100%; border-radius: 12px;
+        border: 1px solid var(--line);
+        display: block;
+        background: #000;
+        max-height: 500px; object-fit: cover;
+    }
+    .figure figcaption { font-size: 12.5px; color: var(--dim); text-align: center; }
+
+    .work-info h3 {
+        font-size: 14px; letter-spacing: .25em;
+        color: var(--accent); margin: 4px 0 8px;
+    }
+    .work:nth-of-type(2) .work-info h3 { color: var(--pink); }
+    .work:nth-of-type(3) .work-info h3 { color: var(--violet); }
+    .work-info p.desc { font-size: 16.5px; color: var(--text); margin-bottom: 18px; }
+    .work-info p { font-size: 15px; color: var(--muted); margin-bottom: 14px; }
+    .work-info b { color: var(--text); font-weight: 600; }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 18px; }
+    .chips span {
+        font-size: 12.5px; color: var(--muted);
+        background: var(--panel2);
+        border: 1px solid var(--line);
+        padding: 4px 12px; border-radius: 999px;
+    }
+    .links { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 6px; }
+    .links a {
+        font-size: 14px; padding: 8px 18px; border-radius: 10px;
+        border: 1px solid rgba(34,211,238,.4);
+        color: var(--accent); transition: all .2s;
+    }
+    .links a.ghost { border-color: var(--line); color: var(--muted); }
+    .links a:hover { background: rgba(34,211,238,.08); text-decoration: none; }
+
+    /* 2D→3D 对比小图 */
+    .compare { display: flex; flex-direction: column; gap: 16px; }
+    .compare figure { margin: 0; }
+    .compare img { aspect-ratio: 16/9; object-fit: cover; }
+    .compare figcaption { margin-top: 6px; }
+    .compare .after img { border-color: rgba(167,139,250,.5); }
+
+    /* ---------- 时间线 ---------- */
+    .timeline {
+        max-width: 1080px;
+        margin: 70px auto 0;
+        padding: 0 24px 90px;
+    }
+    .timeline h2 {
+        text-align: center; font-size: 26px; margin-bottom: 40px;
+        color: var(--text); letter-spacing: .1em;
+    }
+    .tl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .tl-item {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 22px;
+    }
+    .tl-item .step {
+        font-size: 12px; letter-spacing: .25em; color: var(--dim);
+        margin-bottom: 8px;
+    }
+    .tl-item h4 { font-size: 18px; margin-bottom: 8px; }
+    .tl-item p { font-size: 14px; color: var(--muted); }
+
+    footer {
+        border-top: 1px solid var(--line);
+        padding: 34px 24px 44px;
+        text-align: center;
+        color: var(--dim); font-size: 13.5px;
+    }
+    footer a { color: var(--muted); }
+
+    @media (max-width: 860px) {
+        .work-body { grid-template-columns: 1fr; }
+        .tl-grid { grid-template-columns: 1fr; }
+        header h1 { font-size: 32px; }
+        .work-head { flex-wrap: wrap; gap: 6px 12px; }
+        .work-head .en { width: 100%; letter-spacing: .12em; }
+        .work-head h2 { font-size: 26px; }
+        .work-num { font-size: 40px; }
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <div class="kicker">互动编程 · 结课作品</div>
+    <h1>三件作品，<span>三种可能</span></h1>
+    <p class="sub">从一个静止的画面，到一个会呼吸的画布，再到一个可以走进去的世界——这是我这学期用代码做出来的三件东西。</p>
+    <nav class="nav">
+        <a href="#geo">01 几何构成</a>
+        <a href="#particle">02 粒子运动</a>
+        <a href="#game">03 像素冒险 3D</a>
+        <a href="https://github.com/wangzixuanshijiu">GitHub ↗</a>
+    </nav>
+</header>
+
+<!-- ============ 01 几何构成 ============ -->
+<section class="work" id="geo">
+    <div class="work-head">
+        <div class="work-num">01</div>
+        <h2>几何构成</h2>
+        <div class="en">GEO · 静态海报 · p5.js</div>
+    </div>
+    <div class="work-body">
+        <figure class="figure">
+            <img src="assets/geo.png" alt="几何构成海报">
+            <figcaption>800 × 1000 竖版海报 · noLoop() 一帧定稿</figcaption>
+        </figure>
+        <div class="work-info">
+            <h3>它是什么</h3>
+            <p class="desc">一张用代码画出来的构成主义海报：金色、紫色、奶白三层同心圆环，一个蓝色八边形、一颗红色五角星、九条刻度，底部一道拱形弧线，撒 35 颗星尘。</p>
+            <h3>灵感来源</h3>
+            <p>参考了<b>月相序列图</b>的环形排布、<b>黑胶唱片中心标</b>的圆环叠色，以及<b>El Lissitzky 1920 年的构成主义海报</b>的几何秩序感。</p>
+            <h3>关键决定</h3>
+            <p>① 用 <b>noLoop() 一帧定稿</b>，不追动画，把精力全放在构图上；② 圆环不描边，改用<b>底色圆一层层“扣”出来</b>（金 340 → 底 270 → 紫 200 → 底 130 → 奶白 60）；③ 每个图形自带<b>局部坐标系</b>，translate 到哪画到哪，改位置不用重算坐标。</p>
+            <div class="chips">
+                <span>p5.js</span><span>8000 边逼近正八边形</span><span>push/translate/pop</span><span>HSB 配色</span>
+            </div>
+            <div class="links">
+                <a href="https://wangzixuanshijiu.github.io/geo-poster/">在线看图 ↗</a>
+                <a class="ghost" href="https://github.com/wangzixuanshijiu/geo-poster">源码仓库</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ 02 粒子运动 ============ -->
+<section class="work" id="particle">
+    <div class="work-head">
+        <div class="work-num">02</div>
+        <h2>粒子运动</h2>
+        <div class="en">MOTION · 交互画布 · p5.js</div>
+    </div>
+    <div class="work-body">
+        <figure class="figure">
+            <img src="assets/particle.png" alt="粒子运动截图">
+            <figcaption>15 个 HSB 粒子 · 低透明度不清屏留拖尾</figcaption>
+        </figure>
+        <div class="work-info">
+            <h3>它是什么</h3>
+            <p class="desc">一块会呼吸的画布：15 个彩色粒子在里面游动、互相穿过、撞墙反弹，身后拖着长长的光尾。鼠标横着划控制全场速度，竖着划控制粒子大小，点一下画面重新生成。</p>
+            <h3>灵感来源</h3>
+            <p>来自<b>雨夜车窗上的光斑</b>、<b>夜里成群的萤火</b>和<b>长曝光摄影的光轨</b>——那种“模糊而连续的运动感”很难用一张截图表达，于是决定让画布自己动起来。</p>
+            <h3>关键决定</h3>
+            <p>① 拖尾不是存历史点，而是<b>每帧铺一层低透明度的背景色</b>，让旧画面自然衰减；② 粒子用 <b>HSB 色彩模式</b>，只随机色相，饱和度和亮度锁死，画面才不会脏；③ 碰撞判断用 <b>r/2</b>，圆才能完整留在画布里。</p>
+            <div class="chips">
+                <span>p5.js</span><span>HSB 色彩模式</span><span>低 alpha 拖尾</span><span>鼠标映射 map()</span>
+            </div>
+            <div class="links">
+                <a href="https://wangzixuanshijiu.github.io/particle-motion/">在线试玩 ↗</a>
+                <a class="ghost" href="https://github.com/wangzixuanshijiu/particle-motion">源码仓库</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ 03 像素冒险 3D ============ -->
+<section class="work" id="game">
+    <div class="work-head">
+        <div class="work-num">03</div>
+        <h2>像素冒险 3D</h2>
+        <div class="en">ADVENTURE · 平台跳跃 · Three.js / 自研引擎</div>
+    </div>
+    <div class="work-body">
+        <figure class="figure compare">
+            <figure>
+                <img src="assets/game2d_crop.png" alt="2D 原版">
+                <figcaption>2D 原版 · Canvas</figcaption>
+            </figure>
+            <figure class="after">
+                <img src="assets/game3d_crop.png" alt="3D 重制">
+                <figcaption>3D 重制 · 可玩三关</figcaption>
+            </figure>
+        </figure>
+        <div class="work-info">
+            <h3>它是什么</h3>
+            <p class="desc">把我自己的 2D 像素跳跃游戏重制成了 3D：三张地图、会动的敌人、金币与隐藏关，第三人称镜头一路跟拍，最后压成一个 1.4 MB 的单文件，断网也能玩。</p>
+            <h3>灵感来源</h3>
+            <p>关卡节奏来自<b>《超级马里奥》</b>，方块堆叠与探索来自<b>《泰拉瑞亚》</b>；立体化后参考了体素游戏的方块世界观（如开源的 Minetest）。</p>
+            <h3>关键决定</h3>
+            <p>① 国内 CDN 经常加载不出 three.js，干脆把引擎<b>内联进 HTML</b> 做成单文件；② 手感比画面重要——加入<b>土狼时间</b>和<b>跳跃缓冲</b>，跳早了跳晚了都算数；③ 第三人称相机做<b>防穿墙采样收缩</b>，钻角落也不会卡进方块里。</p>
+            <div class="chips">
+                <span>Three.js</span><span>InstancedMesh 实例化</span><span>土狼时间 / 跳跃缓冲</span><span>3 关地图</span><span>单文件离线运行</span>
+            </div>
+            <div class="links">
+                <a href="https://wangzixuanshijiu.github.io/pixel-adventure/">在线试玩 ↗</a>
+                <a class="ghost" href="https://github.com/wangzixuanshijiu/pixel-adventure">源码仓库</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ 时间线 ============ -->
+<div class="timeline">
+    <h2>三步，从平面走向立体</h2>
+    <div class="tl-grid">
+        <div class="tl-item">
+            <div class="step">STEP 01</div>
+            <h4>先把图画准</h4>
+            <p>静态海报练的是基本功：坐标、层级、配色。一帧定稿，逼自己把构图想清楚再动手。</p>
+        </div>
+        <div class="tl-item">
+            <div class="step">STEP 02</div>
+            <h4>让画布有反应</h4>
+            <p>粒子给画面加上了时间和输入：鼠标改变了运动，运动留下了轨迹，画布从此“活”了。</p>
+        </div>
+        <div class="tl-item">
+            <div class="step">STEP 03</div>
+            <h4>走进三维</h4>
+            <p>把 2D 游戏搬进 3D，处理的不再只是 xy，还有相机、深度、光影和性能——也是本学期最难的一关。</p>
+        </div>
+    </div>
+</div>
+
+<footer>
+    王子轩 · 互动编程 · 2026 秋 &nbsp;|&nbsp;
+    <a href="https://github.com/wangzixuanshijiu">github.com/wangzixuanshijiu</a>
+</footer>
+
+</body>
+</html>
