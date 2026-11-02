@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>王子轩 · 互动编程作品集</title>
+<meta name="description" content="王子轩（数字媒体艺术 2502）《互动编程》课程作品集：几何构成 · 粒子运动 · 像素冒险 3D">
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+        --bg: #0F172A; --panel: #172033; --line: #2A3550;
+        --main: #4F46E5; --cyan: #22D3EE; --pink: #F0ABFC;
+        --t1: #F8FAFC; --t2: #CBD5E1; --t3: #94A3B8; --t4: #64748B;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+        background: var(--bg); color: var(--t2);
+        font-family: "Microsoft YaHei", -apple-system, "PingFang SC", sans-serif;
+        line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+    /* ===== 顶栏 ===== */
+    header {
+        position: sticky; top: 0; z-index: 10;
+        background: rgba(15,23,42,.86); backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--line);
+    }
+    .nav { display: flex; align-items: center; justify-content: space-between; height: 58px; }
+    .logo { font-size: 15px; font-weight: bold; color: var(--t1); letter-spacing: .12em; }
+    .logo b { color: var(--cyan); }
+    .nav a.link { font-size: 13px; color: var(--t3); margin-left: 22px; transition: color .2s; }
+    .nav a.link:hover { color: var(--cyan); }
+
+    /* ===== Hero ===== */
+    .hero { padding: 88px 0 64px; position: relative; overflow: hidden; }
+    .hero::after {
+        content: ""; position: absolute; right: -140px; top: -120px; width: 460px; height: 460px;
+        background: radial-gradient(circle, rgba(79,70,229,.35) 0%, rgba(15,23,42,0) 68%);
+        pointer-events: none;
+    }
+    .kicker { font-size: 13px; color: var(--cyan); letter-spacing: .42em; font-weight: bold; }
+    h1 { font-size: 46px; line-height: 1.25; color: var(--t1); margin-top: 18px; font-weight: bold; }
+    h1 em { font-style: normal; color: var(--pink); }
+    .hero p.sub { max-width: 640px; margin-top: 20px; font-size: 16px; color: var(--t3); }
+    .hero .meta { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 10px; }
+    .chip {
+        font-size: 12px; color: var(--t3); border: 1px solid var(--line);
+        padding: 5px 12px; border-radius: 999px; background: rgba(23,32,51,.6);
+    }
+    .chip b { color: var(--t2); font-weight: 600; }
+
+    /* ===== 作品卡 ===== */
+    .works { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; padding-bottom: 30px; }
+    .card {
+        background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+        overflow: hidden; display: flex; flex-direction: column;
+        transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+    }
+    .card:hover {
+        transform: translateY(-6px); border-color: #3B4A73;
+        box-shadow: 0 22px 48px rgba(0,0,0,.45);
+    }
+    .thumb {
+        position: relative; height: 220px; overflow: hidden;
+        background: #0B1120; border-bottom: 1px solid var(--line);
+    }
+    .thumb img, .thumb canvas { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; display: block; }
+    .hint {
+        position: absolute; right: 10px; bottom: 10px; font-size: 11px; color: rgba(248,250,252,.62);
+        letter-spacing: .08em; pointer-events: none;
+        background: rgba(11,17,32,.55); padding: 2px 7px; border-radius: 4px;
+    }
+    .card:hover .thumb img { transform: scale(1.05); }
+    .badge {
+        position: absolute; top: 12px; left: 12px;
+        font-size: 11px; font-weight: bold; letter-spacing: .12em;
+        color: #0B1120; background: var(--cyan); padding: 4px 10px; border-radius: 999px;
+    }
+    .card .body { padding: 20px 20px 22px; display: flex; flex-direction: column; flex: 1; }
+    .card .tech { font-size: 11px; color: var(--t4); letter-spacing: .18em; font-weight: bold; }
+    .card h2 { font-size: 21px; color: var(--t1); margin-top: 8px; }
+    .card p { font-size: 13.5px; color: var(--t3); margin-top: 10px; flex: 1; }
+    .acts { display: flex; gap: 10px; margin-top: 18px; }
+    .btn {
+        font-size: 13px; padding: 8px 16px; border-radius: 8px; font-weight: bold;
+        border: 1px solid transparent; transition: all .2s;
+    }
+    .btn.go { background: var(--main); color: #fff; }
+    .btn.go:hover { background: #6366F1; }
+    .btn.src { border-color: var(--line); color: var(--t3); }
+    .btn.src:hover { color: var(--cyan); border-color: var(--cyan); }
+
+    /* ===== 过程 / 底部 ===== */
+    .process { border-top: 1px solid var(--line); padding: 46px 0 20px; }
+    .process h3 { font-size: 15px; color: var(--t1); letter-spacing: .2em; }
+    .steps { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 20px; }
+    .step {
+        flex: 1; min-width: 220px; background: rgba(23,32,51,.6);
+        border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px;
+    }
+    .step b { display: block; font-size: 13px; color: var(--cyan); }
+    .step span { font-size: 13px; color: var(--t3); display: block; margin-top: 6px; }
+
+    footer {
+        border-top: 1px solid var(--line); margin-top: 40px;
+        padding: 26px 0 40px; font-size: 12.5px; color: var(--t4);
+        display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+    }
+    footer a { color: var(--t3); }
+    footer a:hover { color: var(--cyan); }
+
+    @media (max-width: 900px) {
+        h1 { font-size: 34px; }
+        .works { grid-template-columns: 1fr; }
+        .hero { padding: 60px 0 44px; }
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <div class="wrap nav">
+        <div class="logo">王子轩<b> / 作品集</b></div>
+        <nav>
+            <a class="link" href="#works">三件作品</a>
+            <a class="link" href="#process">制作过程</a>
+            <a class="link" href="https://github.com/wangzixuanshijiu" target="_blank" rel="noopener">GitHub ↗</a>
+        </nav>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="wrap">
+        <div class="kicker">互动编程 · 结课作品集</div>
+        <h1>一次画完的静态构成，<br>被鼠标推动的粒子，<em>能走进去的 3D 关卡</em>。</h1>
+        <p class="sub">三件作品按时间顺序排：从 p5.js 的图形与色彩控制，到交互逻辑与随机系统，再到 Three.js 的三维世界。每一件都可以直接在浏览器里打开。</p>
+        <div class="meta">
+            <span class="chip">王子轩 · 数字媒体艺术 <b>2502</b></span>
+            <span class="chip">课程 · <b>互动编程</b></span>
+            <span class="chip">时间 · <b>2026 秋</b></span>
+        </div>
+    </div>
+</section>
+
+<main class="wrap" id="works">
+    <div class="works">
+
+        <article class="card">
+            <div class="thumb"><span class="badge">作品 01</span>
+                <img src="assets/geo.png" alt="几何构成">
+            </div>
+            <div class="body">
+                <div class="tech">P5.JS · 静态构图</div>
+                <h2>几何构成</h2>
+                <p>800 × 1000 竖版海报，noLoop() 一帧画完：逐行刷出渐变底色，五个圆叠出三条环带，再配上八边形、五角星与 35 颗星尘。</p>
+                <div class="acts">
+                    <a class="btn go" href="https://wangzixuanshijiu.github.io/geo-poster/" target="_blank" rel="noopener">在线查看</a>
+                    <a class="btn src" href="https://github.com/wangzixuanshijiu/geo-poster" target="_blank" rel="noopener">源码</a>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="thumb" id="pthumb"><span class="badge">作品 02</span>
+                <canvas id="pcanvas"></canvas>
+                <span class="hint">把鼠标移上来试试</span>
+            </div>
+            <div class="body">
+                <div class="tech">P5.JS · 鼠标交互</div>
+                <h2>粒子运动</h2>
+                <p>15 个 HSB 色相的粒子在深色画布里撞墙反弹，鼠标横控速度、纵控大小，低透明度背景不清屏，留下运动的拖尾。</p>
+                <div class="acts">
+                    <a class="btn go" href="https://wangzixuanshijiu.github.io/particle-motion/" target="_blank" rel="noopener">在线体验</a>
+                    <a class="btn src" href="https://github.com/wangzixuanshijiu/particle-motion" target="_blank" rel="noopener">源码</a>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="thumb"><span class="badge">作品 03</span>
+                <img src="assets/game3d_crop.png" alt="像素冒险 3D">
+            </div>
+            <div class="body">
+                <div class="tech">THREE.JS · 平台跳跃</div>
+                <h2>像素冒险 3D</h2>
+                <p>把 2D 像素平台关卡逐格拉伸成方块世界：3 个关卡、合成配方与 NPC，第三人称相机自动防穿墙，单文件成品断网也能玩。</p>
+                <div class="acts">
+                    <a class="btn go" href="https://wangzixuanshijiu.github.io/pixel-adventure/" target="_blank" rel="noopener">开始游戏</a>
+                    <a class="btn src" href="https://github.com/wangzixuanshijiu/pixel-adventure" target="_blank" rel="noopener">源码</a>
+                </div>
+            </div>
+        </article>
+
+    </div>
+</main>
+
+<section class="process wrap" id="process">
+    <h3>制作过程</h3>
+    <div class="steps">
+        <div class="step"><b>01 · 先把图画准</b><span>用 p5.js 练构图与配色：形状分层、透明度、HSB 色相。</span></div>
+        <div class="step"><b>02 · 让画布有反应</b><span>加入鼠标输入与随机系统，画面从"看"变成"玩"。</span></div>
+        <div class="step"><b>03 · 走进三维</b><span>把平面关卡数据立成 3D 方块，处理相机、贴图与性能。</span></div>
+    </div>
+</section>
+
+<footer class="wrap">
+    <div>© 2026 王子轩 · 数字媒体艺术 2502 · 互动编程课程作品</div>
+    <div><a href="https://wangzixuanshijiu.github.io/geo-poster/">几何构成</a> · <a href="https://wangzixuanshijiu.github.io/particle-motion/">粒子运动</a> · <a href="https://wangzixuanshijiu.github.io/pixel-adventure/">像素冒险 3D</a></div>
+</footer>
+
+<script>
+/* 作品 02 的缩略图是活的：同一个算法（15 个 HSB 粒子 + 低透明度不清屏），鼠标横控速度、纵控大小 */
+(function () {
+    var cv = document.getElementById('pcanvas');
+    var thumb = document.getElementById('pthumb');
+    if (!cv || !cv.getContext) return;
+    var ctx = cv.getContext('2d');
+    var dpr = Math.min(2, window.devicePixelRatio || 1);
+    var ps = [], N = 15, mx = -1, my = -1, t = 0, W = 0, H = 0;
+
+    function resize() {
+        var r = cv.getBoundingClientRect();
+        if (!r.width) return;
+        W = cv.width = Math.round(r.width * dpr);
+        H = cv.height = Math.round(r.height * dpr);
+        ctx.fillStyle = '#0d1220';
+        ctx.fillRect(0, 0, W, H);
+    }
+
+    function reset() {
+        ps = [];
+        for (var i = 0; i < N; i++) {
+            ps.push({
+                x: Math.random() * W, y: Math.random() * H,
+                vx: (Math.random() * 4 - 2) * dpr, vy: (Math.random() * 4 - 2) * dpr,
+                r: (8 + Math.random() * 22) * dpr,
+                h: 180 + Math.random() * 180
+            });
+        }
+    }
+
+    resize(); reset();
+
+    thumb.addEventListener('mousemove', function (e) {
+        var r = cv.getBoundingClientRect();
+        mx = (e.clientX - r.left) / r.width;
+        my = (e.clientY - r.top) / r.height;
+    });
+    thumb.addEventListener('mouseleave', function () { mx = -1; my = -1; });
+    thumb.addEventListener('click', function () { resize(); reset(); });
+    window.addEventListener('resize', function () { resize(); reset(); });
+
+    function loop() {
+        if (!W) { resize(); reset(); }
+        t += 0.012;
+        /* background(220,70,8,12)：只压暗，不擦干净，留下拖尾 */
+        ctx.fillStyle = 'rgba(13,18,32,0.12)';
+        ctx.fillRect(0, 0, W, H);
+
+        var sx = mx < 0 ? 0.5 + 0.42 * Math.sin(t) : mx;          // 横向 → 速度
+        var sy = my < 0 ? 0.5 + 0.32 * Math.cos(t * 0.8) : my;    // 纵向 → 大小
+        var speed = 0.5 + 2.0 * sx, scale = 0.7 + 0.8 * sy;
+
+        for (var i = 0; i < N; i++) {
+            var p = ps[i];
+            p.x += p.vx * speed; p.y += p.vy * speed;
+            if (p.x < p.r / 2 || p.x > W - p.r / 2) p.vx *= -1;
+            if (p.y < p.r / 2 || p.y > H - p.r / 2) p.vy *= -1;
+            ctx.beginPath();
+            ctx.fillStyle = 'hsla(' + p.h.toFixed(0) + ',85%,56%,0.75)';
+            ctx.arc(p.x, p.y, Math.max(2 * dpr, p.r * scale / 2), 0, Math.PI * 2);
+            ctx.fill();
+        }
+        requestAnimationFrame(loop);
+    }
+    loop();
+})();
+</script>
+</body>
+</html>
